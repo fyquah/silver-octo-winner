@@ -1,0 +1,4 @@
+(library 
+  (name foo_test)
+  (libraries core hardcaml foo_lib)
+  (preprocess pps ppx_jane ppx_hardcaml))
