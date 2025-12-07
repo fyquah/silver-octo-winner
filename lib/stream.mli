@@ -1,4 +1,4 @@
-open Hardcaml 
+open! Hardcaml 
 
 type 'a t  =
   { tdata : 'a 
@@ -7,3 +7,5 @@ type 'a t  =
   ; tfirst : 'a
   }
 [@@deriving hardcaml]
+
+include functor With_valid.Wrap.Include.F
