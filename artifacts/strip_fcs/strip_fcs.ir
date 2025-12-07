@@ -1,0 +1,31 @@
+package strip_fcs
+
+file_number 0 "./strip_fcs.x"
+
+chan strip_fcs__input_ch((bits[32], bits[4], bits[1], bits[1]), id=0, kind=streaming, ops=receive_only, flow_control=ready_valid, strictness=proven_mutually_exclusive)
+chan strip_fcs__output_ch((bits[32], bits[4], bits[1], bits[1]), id=1, kind=streaming, ops=send_only, flow_control=ready_valid, strictness=proven_mutually_exclusive)
+
+top proc __strip_fcs__strip_fcs_0_next(__state: (bits[1], (bits[32], bits[4], bits[1], bits[1])), init={(0, (0, 0, 0, 0))}) {
+  after_all.4: token = after_all(id=4)
+  literal.3: bits[1] = literal(value=1, id=3)
+  receive.5: (token, (bits[32], bits[4], bits[1], bits[1])) = receive(after_all.4, predicate=literal.3, channel=strip_fcs__input_ch, id=5)
+  __state: (bits[1], (bits[32], bits[4], bits[1], bits[1])) = state_read(state_element=__state, id=2)
+  stream: (bits[32], bits[4], bits[1], bits[1]) = tuple_index(receive.5, index=1, id=8, pos=[(0,29,18)])
+  __state_stream_prev: (bits[32], bits[4], bits[1], bits[1]) = tuple_index(__state, index=1, id=12, pos=[(0,35,22)])
+  __state_stream_prev__1: (bits[32], bits[4], bits[1], bits[1]) = tuple_index(__state, index=1, id=16, pos=[(0,38,22)])
+  stream_tlast: bits[1] = tuple_index(stream, index=2, id=10, pos=[(0,32,38)])
+  __state_stream_prev_tdata: bits[32] = tuple_index(__state_stream_prev, index=0, id=13, pos=[(0,35,34)])
+  stream_tkeep: bits[4] = tuple_index(stream, index=1, id=14, pos=[(0,36,26)])
+  stream_tlast__1: bits[1] = tuple_index(stream, index=2, id=15, pos=[(0,37,26)])
+  __state_stream_prev__1_tfirst: bits[1] = tuple_index(__state_stream_prev__1, index=3, id=17, pos=[(0,38,34)])
+  should_send_a_beat: bits[1] = tuple_index(__state, index=0, id=9, pos=[(0,31,35)])
+  in_a_packet_next: bits[1] = not(stream_tlast, id=11, pos=[(0,32,31)])
+  tok: token = tuple_index(receive.5, index=0, id=7, pos=[(0,29,13)])
+  tuple.18: (bits[32], bits[4], bits[1], bits[1]) = tuple(__state_stream_prev_tdata, stream_tkeep, stream_tlast__1, __state_stream_prev__1_tfirst, id=18, pos=[(0,34,59)])
+  and.19: bits[1] = and(literal.3, should_send_a_beat, id=19)
+  tuple.21: (bits[1], (bits[32], bits[4], bits[1], bits[1])) = tuple(in_a_packet_next, stream, id=21, pos=[(0,41,14)])
+  __token: token = literal(value=token, id=1)
+  tuple_index.6: token = tuple_index(receive.5, index=0, id=6)
+  send.20: token = send(tok, tuple.18, predicate=and.19, channel=strip_fcs__output_ch, id=20)
+  next_value.22: () = next_value(param=__state, value=tuple.21, id=22)
+}
