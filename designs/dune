@@ -1,0 +1,16 @@
+(library
+ (name xls_demo_designs)
+ (libraries core hardcaml hardcaml_of_verilog)
+ (preprocess
+  (pps ppx_jane ppx_hardcaml)))
+
+(rule
+ (target stream_cleaner_inner.ml)
+ (mode promote)
+ (deps
+  ../bin/convert_verilog_to_hardcaml.exe
+  stream_cleaner.sexp
+  ../artifacts/stream_cleaner/stream_cleaner.v)
+ (action
+  (bash
+   "../bin/convert_verilog_to_hardcaml.exe syn ocaml-module -i stream_cleaner.sexp -o %{target}")))
