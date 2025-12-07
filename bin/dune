@@ -1,0 +1,5 @@
+(executables
+(names convert_verilog_to_hardcaml)
+(libraries core_unix.command_unix core hardcaml_of_verilog hardcaml)
+(preprocess (pps ppx_jane ppx_hardcaml))
+)
