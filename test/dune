@@ -1,5 +1,15 @@
 (library
  (name xls_demo_test)
- (libraries core hardcaml hardcaml_waveterm hardcaml_step_testbench.effectful xls_demo_lib vec)
+ (inline_tests
+  (deps
+   (source_tree ../artifacts)))
+ (libraries
+  core
+  hardcaml
+  hardcaml_waveterm
+  hardcaml_step_testbench.effectful
+  xls_demo_lib
+  xls_demo_designs
+  vec)
  (preprocess
   (pps ppx_jane ppx_hardcaml)))
